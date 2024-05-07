@@ -1,7 +1,11 @@
 SRC_DIR := ./src
+LIB_DIR := ./lib
 INCLUDE_DIR := ./include
 BIN_DIR := ./bin
+
 SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
+SRC_FILES += $(wildcard $(LIB_DIR)/*.c)
+
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(SRC_FILES))
 
 CSTD = c11
@@ -20,7 +24,7 @@ TARGET := app
 
 .PHONY: all debug release run clean
 
-all: $(BIN_DIR)/$(TARGET) 
+all: $(BIN_DIR)/$(TARGET)
 
 # Build rule
 $(BIN_DIR)/$(TARGET): $(OBJ_FILES)
@@ -28,6 +32,10 @@ $(BIN_DIR)/$(TARGET): $(OBJ_FILES)
 
 # Compile source files
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c | $(BIN_DIR)
+	$(CC) -I $(INCLUDE_DIR) $(CFLAGS) -c $< -o $@
+
+# Compile lib files
+$(BIN_DIR)/%.o: $(LIB_DIR)/%.c | $(BIN_DIR)
 	$(CC) -I $(INCLUDE_DIR) $(CFLAGS) -c $< -o $@
 
 $(BIN_DIR):
